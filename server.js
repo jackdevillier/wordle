@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const express = require('express');
 const mustache = require('mustache-express');
 const http = require('http');
@@ -9,16 +11,24 @@ app.engine('mustache', mustache());
 
 const server = http.createServer(app);
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views');
-});
+//possible guesses
+let wordBank = fs.readFileSync("./words.txt").toString();
+
+//answers
+let answers = fs.readFileSync("./answers.txt").toString();
 
 app.get("/", (req, res) => {
-    res.render('home');
+    res.render('home',{
+        wordBank: wordBank,
+        answers: answers
+    });
+
 });
 
+app.get("/filesystem", (req,res) => {
+    res.json([answers,wordBank])
+});
 
-
-server.listen(3000, () => {
+app.listen(3000, () => {
     console.log('nyoom');
 });

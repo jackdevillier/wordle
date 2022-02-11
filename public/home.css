@@ -4,11 +4,13 @@
 }
 
 .letters {
+	margin: -10px;
+	margin-bottom: 20px;
 	display: inline-block;
-	width:200px;
-	height: 200px;
+	width:130px;
+	height: 130px;
 	box-sizing: border-box;
-	font-size: 150px;
+	font-size: 90px;
 	border-style: solid;	
 	border-width: 10px;
 	border-radius: 20px;
