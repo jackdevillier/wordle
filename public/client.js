@@ -1,18 +1,31 @@
 let answers,wordBank,targetWord;
+
+//fetches files from serverside since you can't import stuff from frontend
 $.get("/filesystem", function(answers_) {
     answers = answers_[0];
     answers = answers.split("\n");
     wordBank = answers_[1];
     wordBank = wordBank.split("\n");
+    //random answer
     targetWord = answers[Math.floor(Math.random() * answers.length)];
-    doShit();
+    
+    //originally the function was outside of the $.get() for file retrieval but because
+    //  of variable scope, I believe the only option was to do the whole thing inside
+    //  of $.get(). No idea if this slows down the whole script but it works!!
+    fixScope();
 });
+//current letter for typing
 let currLetter = 1;
+//current row or "guess" (out of 6 guesses)
 let currRow = 1;
-function doShit() {
+
+//literally everything is in here
+function fixScope() {
 
     $(document).keyup(function(event) {
-        //any letter
+        //any letter. "event.which" is the unicode for the keys pressed, so i
+        //  can easily convert them straight to letters. This part adds the
+        //  letters to the divs
         if (event.which > 64 && event.which < 91 && currLetter < 6 && $("#row" + currRow + " #" + currLetter).contents().length < 1) {
             $("#row" + currRow + " #" + currLetter).append(String.fromCharCode(event.which) + "");
             if (currLetter < 5)
