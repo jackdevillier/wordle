@@ -1,22 +1,20 @@
 let answers,wordBank,targetWord;
-console.log("hello");
 $.get("/filesystem", function(answers_) {
     answers = answers_[0];
     answers = answers.split("\n");
     wordBank = answers_[1];
     wordBank = wordBank.split("\n");
+    targetWord = answers[Math.floor(Math.random() * answers.length)];
     doShit();
 });
 let currLetter = 1;
-
+let currRow = 1;
 function doShit() {
 
     $(document).keyup(function(event) {
-        console.log(event.which);
         //any letter
-        if (event.which > 64 && event.which < 91 && currLetter < 6 && $("#" + currLetter).contents().length < 1) {
-            $("#" + currLetter).append(String.fromCharCode(event.which) + "");
-            console.log($("#" + currLetter).html());
+        if (event.which > 64 && event.which < 91 && currLetter < 6 && $("#row" + currRow + " #" + currLetter).contents().length < 1) {
+            $("#row" + currRow + " #" + currLetter).append(String.fromCharCode(event.which) + "");
             if (currLetter < 5)
                 currLetter++;
         }
@@ -25,15 +23,14 @@ function doShit() {
         if (event.which == 8 && currLetter >= 1) {
 
 
-            $("#" + currLetter).contents().remove();
+            $("#row" + currRow + " #" + currLetter).contents().remove();
             if (currLetter != 1)
                 currLetter--;
         }
         //enter: start wordle function
         if (event.which == 13 && currLetter == 5) {
-            let guess_ = $("#1").html().toString() + $("#2").html().toString() + $("#3").html().toString() + $("#4").html().toString() + $("#5").html().toString();
+            let guess_ = $("#row" + currRow + " #1").html().toString() + $("#row" + currRow + " #2").html().toString() + $("#row" + currRow + " #3").html().toString() + $("#row" + currRow + " #4").html().toString() + $("#row" + currRow + " #5").html().toString();
             guess_ = guess_.toLowerCase();
-            targetWord = answers[Math.floor(Math.random() * answers.length)];
             wordle(guess_, targetWord)
         }
     });
@@ -60,7 +57,6 @@ function wordle(guess, answer) {
         for (let letter = 0; letter < guess.length; letter++) {
 
             //check the same letter pos in guess and answer
-            console.log(answer);
             if (answer[letter] == guess[letter]) {
 
                 //they are the same, add X to the accuracy array, 
@@ -94,23 +90,22 @@ function wordle(guess, answer) {
         for (let hint = 0; hint < colorReference.length; hint++) {
             let box = hint + 1;
             if (colorReference[hint] == "X")
-                $("#" + box).css("background","green");
+                $("#row" + currRow + " #" + box).css("background","green");
             if (colorReference[hint] == "I")
-                $("#" + box).css("background","yellow");
+                $("#row" + currRow + " #" + box).css("background","yellow");
             if (colorReference[hint] == "O")
-                $("#" + box).css("background","grey");
+                $("#row" + currRow + " #" + box).css("background","grey");
         }
-        //win case
 
-        // if (accuracyArray.join("") == "XXXXX") {
-        //     console.log("You win!!");
-        // } else {
-        //     wordle(answer);
-        // }
+        if (currRow < 6) {
+            currRow++;
+            currLetter = 1;
+        } else {
+            $("#winmsg").append("The answer was " + answer.toUpperCase());
+        }
+
     } else {
-
         //if the word does not exist
-
         console.log("It needs to be a real word!");
     }
 
