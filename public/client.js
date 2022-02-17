@@ -1,4 +1,4 @@
-let answers,wordBank,targetWord;
+let answers, wordBank, targetWord;
 
 //fetches files from serverside since you can't import stuff from frontend
 $.get("/filesystem", function(answers_) {
@@ -8,7 +8,7 @@ $.get("/filesystem", function(answers_) {
     wordBank = wordBank.split("\n");
     //random answer
     targetWord = answers[Math.floor(Math.random() * answers.length)];
-    
+
     //originally the function was outside of the $.get() for file retrieval but because
     //  of variable scope, I believe the only option was to do the whole thing inside
     //  of $.get(). No idea if this slows down the whole script but it works!!
@@ -18,7 +18,7 @@ $.get("/filesystem", function(answers_) {
 let currLetter = 1;
 //current row or "guess" (out of 6 guesses)
 let currRow = 1;
-
+console.log("shit");
 //literally everything is in here
 function fixScope() {
 
@@ -34,12 +34,26 @@ function fixScope() {
 
         //backspace
         if (event.which == 8 && currLetter >= 1) {
+            //     if (currLetter != 5) {
+            //     $("#row" + currRow + " #" + (currLetter - 1)).contents().remove();
+            // } else {
+            //     $("#row" + currRow + " #" + currLetter).contents().remove();
+            // }
+
+            if (currLetter != 1 && $("#row" + currRow + " #" + currLetter).html() == "") {
+                $("#row" + currRow + " #" + (currLetter - 1)).contents().remove();
+            } else {
+                console.log($("#row" + currRow + " #4").html());
+                $("#row" + currRow + " #" + currLetter).contents().remove();
+            }
 
 
-            $("#row" + currRow + " #" + currLetter).contents().remove();
             if (currLetter != 1)
                 currLetter--;
         }
+
+
+
         //enter: start wordle function
         if (event.which == 13 && currLetter == 5) {
             let guess_ = $("#row" + currRow + " #1").html().toString() + $("#row" + currRow + " #2").html().toString() + $("#row" + currRow + " #3").html().toString() + $("#row" + currRow + " #4").html().toString() + $("#row" + currRow + " #5").html().toString();
@@ -105,9 +119,9 @@ function wordle(guess, answer) {
             if (colorReference[hint] == "X")
                 $("#row" + currRow + " #" + box).css("background","green");
             if (colorReference[hint] == "I")
-                $("#row" + currRow + " #" + box).css("background","yellow");
+                $("#row" + currRow + " #" + box).css("background", "yellow");
             if (colorReference[hint] == "O")
-                $("#row" + currRow + " #" + box).css("background","grey");
+                $("#row" + currRow + " #" + box).css("background", "grey");
         }
 
         if (currRow < 6) {

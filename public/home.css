@@ -3,6 +3,13 @@
 	font-size: 80px;
 }
 
+body {
+	background: gray;
+}
+
+#smallspace {
+margin-top: 20px;
+}
 .letters {
 	margin: -10px;
 	margin-bottom: 20px;
