@@ -1,10 +1,12 @@
 * {
 	font-family: verdana;
-	font-size: 80px;
+	font-size: 70px;
+	color: white;
+	-moz-user-select: none;
 }
 
 body {
-	background: gray;
+	background: black;
 }
 
 #smallspace {
@@ -12,18 +14,42 @@ margin-top: 20px;
 }
 .letters {
 	margin: -10px;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 	display: inline-block;
-	width:130px;
-	height: 130px;
+	width:80px;
+	height: 80px;
+	line-height: 70px;
 	box-sizing: border-box;
-	font-size: 90px;
+	font-size: 60px;
 	border-style: solid;	
-	border-width: 10px;
-	border-radius: 20px;
+	border-width: 2px;
+	border-radius: 15px;
 	vertical-align: top;
 	}
 
-br {
+#keyboard {
+	display: block;
+	margin-top:-90px;
+}
+
+.keyboardrow {
+	margin-bottom:-20px;
+}
+
+.kbl {
+	background: #4a4a4a;
+	margin:-7px;
+	font-size: 30px;
 	display: inline-block;
+	width:40px;
+	height:50px;
+	line-height: 50px;
+	border-style: solid;
+	border-width: 1px;
+	border-color:grey;
+	border-radius: 15px;	
+}
+
+.kbl:hover {
+	background:gray;
 }

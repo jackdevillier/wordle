@@ -18,7 +18,6 @@ $.get("/filesystem", function(answers_) {
 let currLetter = 1;
 //current row or "guess" (out of 6 guesses)
 let currRow = 1;
-console.log("shit");
 //literally everything is in here
 function fixScope() {
 
