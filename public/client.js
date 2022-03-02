@@ -1,5 +1,9 @@
 let answers, wordBank, targetWord;
 
+//for changing the colors of the letters in the keyboard section
+let yellowLetters = "";
+let greenLetters = "";
+
 //fetches files from serverside since you can't import stuff from frontend
 $.get("/filesystem", function(answers_) {
     answers = answers_[0];
@@ -33,11 +37,6 @@ function fixScope() {
 
         //backspace
         if (event.which == 8 && currLetter >= 1) {
-            //     if (currLetter != 5) {
-            //     $("#row" + currRow + " #" + (currLetter - 1)).contents().remove();
-            // } else {
-            //     $("#row" + currRow + " #" + currLetter).contents().remove();
-            // }
 
             if (currLetter != 1 && $("#row" + currRow + " #" + currLetter).html() == "") {
                 $("#row" + currRow + " #" + (currLetter - 1)).contents().remove();
@@ -54,7 +53,7 @@ function fixScope() {
 
 
         //enter: start wordle function
-        if (event.which == 13 && currLetter == 5) {
+        if (event.which == 13 && currLetter == 5 && $("#row" + currRow + " #5").html() != "") {
             let guess_ = $("#row" + currRow + " #1").html().toString() + $("#row" + currRow + " #2").html().toString() + $("#row" + currRow + " #3").html().toString() + $("#row" + currRow + " #4").html().toString() + $("#row" + currRow + " #5").html().toString();
             guess_ = guess_.toLowerCase();
             wordle(guess_, targetWord)
@@ -64,6 +63,8 @@ function fixScope() {
 }
 
 function wordle(guess, answer) {
+
+
 
     let answerDupeCheck = answer;
 
@@ -90,6 +91,16 @@ function wordle(guess, answer) {
 
                 accuracyArray[letter] = "X";
                 answerDupeCheck = removeLetterFromDupe(guess[letter], answerDupeCheck);
+
+                //coloring the keyboard
+
+                if (!greenLetters.includes(guess[letter])) {
+                    greenLetters += guess[letter];
+
+                    if (yellowLetters.includes(guess[letter])) {
+                        yellowLetters.replace(guess[letter], "");
+                    }
+                }
             }
         }
 
@@ -109,6 +120,12 @@ function wordle(guess, answer) {
             if (answer[letter] != guess[letter] && answer.includes(guess[letter]) && answerDupeCheck.includes(guess[letter])) {
                 accuracyArray[letter] = "I";
                 answerDupeCheck = removeLetterFromDupe(guess[letter], answerDupeCheck);
+
+                //coloring the keyboard
+
+                if (!greenLetters.includes(answer[letter]) && !yellowLetters.includes(answer[letter])) {
+                    yellowLetters += guess[letter];
+                }
             }
         }
         console.log(accuracyArray);
@@ -116,11 +133,22 @@ function wordle(guess, answer) {
         for (let hint = 0; hint < colorReference.length; hint++) {
             let box = hint + 1;
             if (colorReference[hint] == "X")
-                $("#row" + currRow + " #" + box).css("background","green");
+                $("#row" + currRow + " #" + box).css("background", "green");
             if (colorReference[hint] == "I")
                 $("#row" + currRow + " #" + box).css("background", "yellow");
             if (colorReference[hint] == "O")
                 $("#row" + currRow + " #" + box).css("background", "grey");
+                $("#" + guess[hint]).css("background", "grey");
+        }
+
+        for (let key = 0; key < yellowLetters.length; key++) {
+            console.log(key);
+            $("#" + yellowLetters[key]).css("background", "yellow");
+        }
+        
+        for (let key = 0; key < greenLetters.length; key++) {
+            console.log(key);
+            $("#" + greenLetters[key]).css("background", "green");
         }
 
         if (currRow < 6) {
